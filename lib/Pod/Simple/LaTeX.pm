@@ -10,7 +10,7 @@ package Pod::Simple::LaTeX;
 
 use strict;
 use vars qw($VERSION @ISA %Escape $WRAP %Tagmap);
-$VERSION = '0.05';
+$VERSION = '0.06';
 use Pod::Simple::PullParser ();
 BEGIN {@ISA = ('Pod::Simple::PullParser')}
 
@@ -134,7 +134,7 @@ sub accent {
   );
 
   $$str_ref =~ s/$_/$latin_1{$_}/eg for keys %latin_1;
-$$str_ref =~ s{\\(\d)}{"FIXME XXX $1\$"}eg; # XXX Aiyee, s/// escaping and $ madness ensues
+#$$str_ref =~ s{\\(\d)}{"FIXME XXX $1\$"}eg; # XXX Aiyee, s/// escaping and $ madness ensues
 }
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -322,6 +322,7 @@ sub texesc {
     $escaperange = qr/$escaperange/;
   }
   for(@_) { s/$escaperange/$Escape{$1}/g }
+  for(@_) { accent(\$_); }
 
   return $_[0] unless wantarray;
   return @_;
